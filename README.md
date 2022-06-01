@@ -6,7 +6,7 @@ The schema of this database is taken from w3resource and questions are curated f
 
 ![movie-database](https://user-images.githubusercontent.com/52796809/171344385-083d28e3-eb2a-476b-8c46-66e1224de285.png)
 
-## Sample Database description:
+## Movies Database description:
 
 The sample database represents some of the data storage and retrieval about a movie related industry. Most of the people loves to watch movie, and for all of them we are providing a sample information about the movie related questions coming to their mind. This design of database will make it easier to the movie lovers to know the curiocities about the movies.
 
