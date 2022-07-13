@@ -1,1 +1,42 @@
+--------------------
+-- ADVANCED QUERIES
+--------------------
 
+--1. Use an appropriate combination of SQL, Stored Procedures and/or Triggers to implement the ability to allow programmers to cast a new actor (by ID#) to a movie
+-- (by ID#).
+CREATE PROCEDURE actor_cast 
+@act_id INTEGER,
+@mov_id INTEGER
+AS
+BEGIN
+	INSERT INTO movie_cast (act_id, mov_id) VALUES (@act_id, @mov_id);
+END;
+
+--2. Do not allow actors to be cast more than once for each movie.
+CREATE TRIGGER limitations
+ON movie_cast
+INSTEAD OF INSERT
+AS
+BEGIN
+	DECLARE @num_o_castings INTEGER;
+	SET NOCOUNT ON
+	SELECT
+	@num_o_castings = COUNT(i.act_id)
+	FROM movie_cast mc INNER JOIN inserted i
+	ON mc.mov_id = i.mov_id;
+	IF(@num_o_castings > 1)
+		PRINT 'This actor is already cast for this movie.';
+	ELSE
+		INSERT INTO movie_cast(act_id, mov_id)
+		SELECT act_id, mov_id FROM inserted
+END;
+
+--3. Demonstrate that your system works by trying the following.
+-- Cast George Faraday(#124) in Slumdog Millionaire(#921).
+EXEC actor_cast 124, 921;        -- This will insert the record in the table movie_cast
+
+-- Cast George Faraday(#124) in Back to the Future (#928).
+EXEC actor_cast 124, 928;        -- This will insert the record in the table movie_cast
+
+-- Cast George Faraday(#124) in Slumdog Millionaire(#921).
+EXEC actor_cast 124, 921;         -- This will not insert the record since act_id #124 is already casted for the mov_id #921.
